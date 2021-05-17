@@ -1,5 +1,7 @@
 <?php
-
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization, Accept,charset,boundary,Content-Length');
+header('Access-Control-Allow-Origin: *');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +24,16 @@ Route::get('/logout', function () {
     Session::forget('user');
     return view('/login');
 });
+
+Route::view('/register','register');
+Route::post('/register', 'UserController@register');
 Route::post('/login','UserController@user_login');
-Route::get('/chat','chatController@chat');
-Route::get('/open_chat_messages','chatController@open_chat_messages');
-Route::post('/save_chat','chatController@save_chat');
+Route::get('/chat_user','ChatController@chat');
+Route::get('/open_chat_messages','ChatController@open_chat_messages');
+Route::post('/save_chat','ChatController@save_chat');
+Route::get('/latest_chat_user','ChatController@latest_chat_user');
+Route::get('/chat_user_name','ChatController@chat_user_name');
+Route::get('/search','ChatController@search');
+
+// Route::get('ajaxImageUpload', 'ChatController@ajaxImageUpload');
+// Route::post('ajaxImageUpload', 'ChatController@ajaxImageUploadPost')->name('ajaxImageUpload');

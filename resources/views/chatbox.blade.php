@@ -1,6 +1,5 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 <style>
 .container {
     max-width: 1170px;
@@ -216,22 +215,96 @@ img {
     height: 516px;
     overflow-y: auto;
 }
+
+.chat_list:hover {
+    background-color: #c4c4c4;
+}
+
+.emoji-menu {
+    bottom: 50px !important;
+    transform: none !important;
+    /* position: fixed !important; */
+    right: 100px !important;
+    left: 400px !important;
+    top: auto !important;
+}
+
+.emoji-picker-icon {
+    margin-right: -313px;
+    margin-top: 10px;
+}
+
+.image-upload>input {
+    display: none;
+}
+
+
+.fake-input {
+    position: relative;
+    width: 240px;
+}
+
+.fake-input input {
+    border: none;
+    background-color: #fff;
+    display: block;
+    width: 100%;
+    /* box-sizing: border-box */
+}
+
+.fake-input img {
+    position: absolute;
+    top: 10px;
+    right: 10px
+}
+
+.emoji-wysiwyg-editor {
+    height: 48px;
+    width: 625;
+}
 </style>
 
 
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+        integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
-        rel="stylesheet" </head>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/util.min.js"
+        integrity="sha512-rTVSXeGNtYZ5y59UtVTHvenNsJ6xkNiaft0eM38EjZBMDPmVkMsxpmDLYZ1y0DJQ5F9lm3a8yQMMw2HIXyEOeQ=="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/css/emoji.min.css"
+        integrity="sha512-g85Z5r0tA1tvV9xX6Ox6ZLhJPkX1k0diGsJcVm56Zd++P69y82MJ0qG6BAMeKfHrDWE+0DoFl7TUqEha63u5GA=="
+        crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/config.min.js"
+        integrity="sha512-byA8FwGXZ9uZ/S17exCzIxYz9obk57h608OIbDkDpGzO/IfU1mhQoihqLW+IK19J/gBT/inpG2ohYZCGxuO4VA=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/jquery.emojiarea.min.js"
+        integrity="sha512-mGa/ehqlsnXVGkJJhvP0t1+UFDqm8FtZHkJdDUhMbircdEe+unkimR2UL7V7uRFe9Yf/kul+naEh65I9p43R5w=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/emoji-picker.min.js"
+        integrity="sha512-EDnYyP0SRH/j5K7bYQlIQCwjm8dQtwtsE+Xt0Oyo9g2qEPDlwE+1fbvKqXuCoMfRR/9zsjSBOFDO6Urjefo28w=="
+        crossorigin="anonymous"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+        rel="stylesheet"> -->
+</head>
 
 <body>
 
     <div class="container">
         @csrf
         <h3 class=" text-center">Messaging</h3>
+        @if(Session::has('user'))
+        <label for="" style="margin-left: 980px;">{{Session::get('user')['name']}}
+        </label>
+        <button><a href="{{url('/logout')}}">Logout</a></button>
+        @else
+        <a href="/login" style="margin-left: 1100px;">login</a>
 
+        @endif
         <div class="messaging">
             <div class="inbox_msg">
                 <div class="inbox_people">
@@ -241,10 +314,10 @@ img {
                         </div>
                         <div class="srch_bar">
                             <div class="stylish-input-group">
-                                <input type="text" class="search-bar" placeholder="Search">
+                                <!-- <input type="text" class="search-bar" placeholder="Search">
                                 <span class="input-group-addon">
                                     <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                                </span>
+                                </span> -->
                             </div>
                         </div>
                     </div>
@@ -259,49 +332,78 @@ img {
                                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
                                         alt="sunil"> </div>
                                 <div class="chat_ib">
-                                    <h5>{{$user_list->name}}</h5>
-                                    <p>Test, which is a new approach to have all solutions
-                                        astrology under one roof.</p>
+                                    <p>{{$user_list->name}}</p>
+                                    <p>{{$user_list->messageObj ? $user_list->messageObj->message : "Start chatting"}}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         @endforeach
+
                         <!-- <input type="text" name="from_to" id="from_to"> -->
-                        <button style="margin-left: 370px;margin-top: 35px;"><a href="/logout">Logout</a></button>
+
                     </div>
                 </div>
                 <div class="mesgs">
                     <div class="msg_history">
-                        <!-- <div class="incoming_msg">
-                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                    alt="sunil"> </div>
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p>Test which is a new approach to have all
-                                        solutions</p>
-                                    <span class="time_date"> 11:01 AM | June 9</span>
+                        <div class="chat_list sticky-top" style="background: #ffffff;">
+                            <div class="chat_people" style="position: relative;">
+                                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                        alt="sunil"> </div>
+                                <div class="chat_ib">
+                                    <h2 id='chating_user_name'></h2>
                                 </div>
                             </div>
-                        </div> -->
+
+                        </div>
                         <div id="chat_message">
                             <h3>Please select user to start chat</h3>
                         </div>
-                        <!-- @foreach($users_message as $messages)
-                        <div class="outgoing_msg">
+
+                        <!-- <div class="outgoing_msg">
                             <div class="sent_msg">
-                                <p> {{$messages->message}}</p>
-                                <span class="time_date"> {{$messages->created_at}}</span>
+                                <p> </p>
+                                <span class="time_date"> </span>
                             </div>
-                        </div>
-                        @endforeach -->
+                        </div> -->
+
                     </div>
 
-                    <div class="type_msg">
+                    <div class="type_msg" id="type_msg_box">
                         <div class="input_msg_write">
-                            <input type="text" class="write_msg" name="message" id="message"
-                                placeholder="Type a message" />
-                            <button class="msg_send_btn" type="button" onclick="save_message()"><i
-                                    class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                            <form enctype="multipart/form-data">
+                                <div class="fake-input">
+                                    <input type="text" class="write_msg image-upload" name="message" id="message"
+                                        placeholder="Type a message" data-emojiable="true" data-emoji-input="unicode" />
+                                    <div class="image-upload ">
+                                        <label for="image">
+                                            <img src="https://icon-library.net/images/upload-photo-icon/upload-photo-icon-21.jpg"
+                                                width=25 style="margin-right:
+                                        -351px;" />
+                                        </label>
+                                        <input type="file" name="image" id="image" onchange="preview()" hidden />
+
+                                    </div>
+
+                                </div>
+                                <button class="msg_send_btn" type="button" onclick="save_message()"><i
+                                        class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                                <!-- <input type="file" name="image" id="image"> -->
+                                <!-- <div class="image-upload ">
+                                    <label for="image">
+                                        <img src="https://icon-library.net/images/upload-photo-icon/upload-photo-icon-21.jpg"
+                                            class="write_msg" style="width: 28px; margin: right 100px;" />
+                                    </label>
+                                    <input type="file" name="image" id="image" />
+                                </div> -->
+
+                                <!-- <div class="fake-input">
+                                    <input type="text">
+                                    <img src="https://ptetutorials.com/images/user-profile.png" width=25 />
+                                </div> -->
+
+
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -315,6 +417,8 @@ img {
 </html>
 <script>
 let toUserId = null;
+$('#type_msg_box').hide('slow');
+
 
 function reloadPage() {
     location.reload(true);
@@ -329,82 +433,142 @@ function save_message() {
     // return
     var message = $('#message').val();
     var from_to = toUserId;
-    console.log(from_to);
+    var image = $('#image').val();
+    var fdata = new FormData()
+    if ($("#image")[0].files.length > 0)
+        fdata.append("file", $("#image")[0].files[0])
+    fdata.append("message", message);
+    fdata.append("from_to", from_to);
+    fdata.append("_token", "{{ csrf_token() }}");
+    d = $("#add_new_product").serialize();
+    // console.log(image, d);
     $.ajax({
         type: "POST",
         url: 'save_chat',
-        data: {
-            "_token": "{{ csrf_token() }}",
-            message: message,
-            from_to: from_to
-
-        },
+        // data: {
+        //     "_token": "{{ csrf_token() }}",
+        //     message: message,
+        //     from_to: from_to,
+        //     image: image
+        // },
+        data: fdata,
+        contentType: false,
+        processData: false,
         success: function(data) {
             $('#message').val('');
             console.log('message SuccessFully Sent');
             open_chat_messages(toUserId);
+
         }
     });
 }
 
-// function open_chat_list(user_id) {
-//     // alert(user_id);
-//     // open_chat_messages($id)
-//     toUserId = user_id;
-//     $.ajax({
-//         type: "GET",
-//         url: 'open_chat_messages',
-//         data: {
-//             toUserId: user_id // "_token": "{{ csrf_token() }}",
-
-//         },
-//         success: function(data) {
-//             console.log(data);
-//             $('#chat_message').append(`
-
-//             <div class="outgoing_msg">
-//                             <div class="sent_msg">
-
-
-
-//                             </div>
-//                         </div>
-//               `);
-//         }
-//     });
-
-
+const interval = setInterval(function() {
+    var user_id = $('#fromto').val();
+    if (user_id) {
+        open_chat_messages(user_id);
+    }
+}, 2000);
 
 function open_chat_messages(user_id) {
-    // alert(user_id);
+    chat_user_name(user_id);
     toUserId = user_id;
-    var from_id = $('#from_id').val();
-    // $('#chat_message').append("");
+    $('#type_msg_box').show('slow');
+    // var from_id = $('#from_id').val();
+    // var message = $('#message').val();
     $.ajax({
         type: "GET",
         url: 'open_chat_messages',
         data: {
-            toUserId: user_id // "_token": "{{ csrf_token() }}",
+            toUserId: user_id, // "_token": "{{ csrf_token() }}",
 
         },
         success: function(data) {
+
             console.log(data);
             if (data && data.length) {
                 let msgData = ""
                 for (i = 0; i < data.length; i++) {
-                    let dataValue = data[i]
-                    msgData = msgData + `  
+                    let dataValue = data[i];
+                    let imageUrl = "{{ URL::to('/') }}/images/" + dataValue.image;
+                    console.log(imageUrl);
+                    if (user_id === dataValue.from) {
+                        msgData = msgData + `<div class="incoming_msg">
+                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                    alt="sunil"> </div>
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                <p>${dataValue.message}</p>
+                                ${dataValue.image ? "<img src='"+imageUrl+"'>" : ""}
+                              
+                                <span class="time_date">${dataValue.created_at}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else {
+                        msgData = msgData + `  
                         <div class="outgoing_msg">
                             <div class="sent_msg">
                                 <p>${dataValue.message}</p>
+                                ${dataValue.image ? "<img src='"+imageUrl+"'>" : ""}
                                 <span class="time_date">${dataValue.created_at}</span>
                             </div>
                         </div>
                     `;
+                    }
                 }
                 $('#chat_message').html(msgData)
             }
         }
     });
 }
+
+function chat_user_name(user_id) {
+    toUserId = user_id;
+    console.log(toUserId);
+    // var from_id = $('#from_id').val();
+    // var message = $('#message').val();
+    $.ajax({
+        type: "GET",
+        url: 'chat_user_name',
+        data: {
+            toUserId: user_id, // "_token": "{{ csrf_token() }}",
+
+        },
+        success: function(data) {
+            console.log(data.name);
+            // $('#chating_user_name').append(`<h2>${data.name}</h2>`);
+            $('#chating_user_name').html(`<h2>${data.name}</h2>`)
+        }
+    });
+}
+
+
+$(function() {
+    // Initializes and creates emoji set from sprite sheet
+    window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: 'http://localhost/chat-app/lib/img',
+        popupButtonClasses: 'fa fa-smile-o'
+    });
+    // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+    // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+    // It can be called as many times as necessary; previously converted input fields will not be converted again
+    window.emojiPicker.discover();
+});
+// Google Analytics
+(function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+ga('create', 'UA-49610253-3', 'auto');
+ga('send', 'pageview');
 </script>

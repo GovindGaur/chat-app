@@ -20,6 +20,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Login</button>
+                <a href="/register">Sign Up</a>
             </form>
 
         </div>

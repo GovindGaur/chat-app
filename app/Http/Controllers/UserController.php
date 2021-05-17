@@ -12,7 +12,17 @@ class UserController extends Controller
         return redirect('/login');
     } else {
             $req->session()->put('user', $user);
-        return redirect('/chat');
+        return redirect('/chat_user');
     }
     }
+
+    public function register(Request $req){
+                $user = new User;
+                $user->name = $req->name;    
+                $user->email = $req->email;    
+                $user->password = Hash::make($req->password);   
+                $user->save();
+                return redirect('/login'); 
+        
+        }
 }
