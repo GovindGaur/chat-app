@@ -42,7 +42,8 @@ class ChatController extends Controller
     public function save_chat(Request $req){
         $chat = new Chat;
         $chat->from = $req->session()->get('user')['id'];
-        $chat->message = $req->message;
+        $message=$req->message ? $req->message : "";
+        $chat->message = $message;
         $chat->from_to= $req->from_to;
         $chat->image = "";
         // dd($req->file('file'));
@@ -91,8 +92,8 @@ class ChatController extends Controller
         $toUserId = $request->get('toUserId','default_value');
         $chat_user_name =  DB::table('users')
         ->select('users.id','users.name')
-        ->join('chat','chat.from_to','=','users.id')
-        ->where('from_to',$toUserId)
+        // ->join('chat','chat.from_to','=','users.id')
+        ->where('users.id',$toUserId)
         ->first();
         // dd($chat_user_name);
         return response()->json($chat_user_name);
